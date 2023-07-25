@@ -51,12 +51,15 @@ public_users.get('/author/:author',function (req, res) {
 });
 
 // Get all books based on title
-public_users.get('/title/:title',function (req, res) {
-  const title = req.params.title
-  const books_values = Object.values(books)
-  const filtered_books = books_values.filter((book) => book.title.toLowerCase() === title.toLowerCase())
+public_users.get('/author/:author', async (req, res) => {
+  try {
+      const author = await req.params.author
+    const books_values = Object.values(books)
+    const filtered_books = books_values.filter((book) => book.author.toLowerCase() === author.toLowerCase())
     res.send(filtered_books)
-  return res.status(300).json({message: "Yet to be implemented"});
+  } catch(err) {
+      res.status(500).json({message: "Internal Server Error"});
+  }
 });
 
 //  Get book review
