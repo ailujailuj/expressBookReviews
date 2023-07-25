@@ -42,15 +42,6 @@ public_users.get('/isbn/:isbn',async (req, res) => {
 });
   
 // Get book details based on author
-public_users.get('/author/:author',function (req, res) {
-    const author = req.params.author
-  const books_values = Object.values(books)
-  const filtered_books = books_values.filter((book) => book.author.toLowerCase() === author.toLowerCase())
-  res.send(filtered_books)
-  return res.status(300).json({message: "Yet to be implemented"});
-});
-
-// Get all books based on title
 public_users.get('/author/:author', async (req, res) => {
   try {
       const author = await req.params.author
@@ -62,11 +53,26 @@ public_users.get('/author/:author', async (req, res) => {
   }
 });
 
+// Get all books based on title
+public_users.get('/title/:title', async (req, res) => {
+  try {
+      const title = await req.params.title
+      const books_values = Object.values(books)
+      const filtered_books = books_values.filter((book) => book.title.toLowerCase() === title.toLowerCase())
+      res.send(filtered_books)
+  } catch(err) {
+      res.status(500).json({message: "Internal Server Error"});
+  }
+});
+
 //  Get book review
-public_users.get('/review/:isbn',function (req, res) {
-    const isbn = req.params.isbn
+public_users.get('/review/:isbn', async (req, res) => {
+  try {
+    const isbn = await req.params.isbn
     res.send(books[isbn].reviews)
-  return res.status(300).json({message: "Yet to be implemented"});
+  } catch (err) {
+    res.status(500).json({message: "Internal Server Error"});
+  }
 });
 
 module.exports.general = public_users;
