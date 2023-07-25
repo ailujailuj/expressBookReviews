@@ -1,5 +1,4 @@
 const express = require('express');
-const axios = require('axios');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
@@ -23,12 +22,12 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/', async (res) {
+public_users.get('/',async (req, res) => {
   try {
-    const bookList = await axios.get("./booksdb.js")
-    res.send(JSON.stringify(bookList, null, 4))
-  } catch (err) {
-    res.status.send(500).json(message: "Internal Server Error")
+    const bookList = await JSON.stringify(books, null, 4)
+    res.send(bookList)
+  } catch(err) {
+    res.status(500).json({message: "Internal Server Error"})
   }
 });
 
