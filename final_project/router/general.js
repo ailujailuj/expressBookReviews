@@ -1,4 +1,5 @@
 const express = require('express');
+const axios = require('axios');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
 let users = require("./auth_users.js").users;
@@ -22,9 +23,13 @@ public_users.post("/register", (req,res) => {
 });
 
 // Get the book list available in the shop
-public_users.get('/',function (req, res) {
-    res.send(JSON.stringify(books, null, 4))
-    return res.status(300).json({message: "Yet to be implemented"});
+public_users.get('/', async (res) {
+  try {
+    const bookList = await axios.get("./booksdb.js")
+    res.send(JSON.stringify(bookList, null, 4))
+  } catch (err) {
+    res.status.send(500).json(message: "Internal Server Error")
+  }
 });
 
 // Get book details based on ISBN
